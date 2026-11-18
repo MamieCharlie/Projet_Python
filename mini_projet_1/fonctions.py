@@ -156,15 +156,14 @@ def detecter_anomalie(mesures):
         # Vérifier si la consommation est anormalement élevée
         if consommation > seuil:
 
-            anomalies.append
-            ({
+            anomalies.append({
                 "Salle": salle,
                 "Jour": mesure["Jour"],
                 "Heure": mesure["Heure"],
                 "Consommation": consommation,
                 "Moyenne_reference": moyenne_reference,
                 "Seuil": seuil,
-                "mesures": mesure
+                "mesure": mesure
             })
 
     # Afficher les anomalies
