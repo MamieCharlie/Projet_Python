@@ -1,20 +1,92 @@
+print("début")
+
 import fonctions
+print("import fait")
 
 def main():
 
-    nom_fichier = input("Fichier:")
-    print("Pouet1")
+    # Demander le nom du fichier à charger
+    nom_fichier = input("Entrez le nom du fichier : ")
+
+    # Charger les données
     mesures = fonctions.charger_donnees(nom_fichier)
-    print("pouet2")
-    fonctions.afficher_salle(mesures)
-    print("pouet3")
-    fonctions.calculer_statistiques(mesures)
-    print("pouet4")
-    anomalie = fonctions.detecter_anomalie(mesures)
-    print("pouet5")
-    fonctions.sauvegarder_donnees(mesures, anomalie)
-    print("pouet6")
 
-    return
+    # Vérifier que le fichier existe
+    if mesures is None:
+        return
 
-main(  )
+    # Normaliser les noms des salles
+    mesures = fonctions.normaliser_salle(mesures)
+
+    # Initialiser la variable pour conserver les anomalies
+    anomalies = []
+
+    # Boucle du menu
+    choix = 0
+
+    while choix != 7:
+
+        print("\n===== DONNEES ENERGETIQUES =====")
+        print("1. Afficher les mesures")
+        print("2. Afficher les salles")
+        print("3. Rechercher une salle")
+        print("4. Afficher les statistiques")
+        print("5. Rechercher les anomalies")
+        print("6. Sauvegarder les donnees nettoyees")
+        print("7. Quitter")
+
+        choix = input("\nVotre choix : ")
+
+        # Vérifier le choix de l'utilisateur
+        if choix == "1":
+
+            # Afficher toutes les mesures
+            for mesure in mesures:
+                print(mesure)
+
+        elif choix == "2":
+
+            # Afficher les salles sans doublons
+            salles = []
+
+            for mesure in mesures:
+                if mesure["Salle"] not in salles:
+                    salles.append(mesure["Salle"])
+
+            print("\n--- LISTE DES SALLES ---")
+
+            for salle in salles:
+                print(salle)
+
+        elif choix == "3":
+
+            # Rechercher une salle
+            fonctions.afficher_salle(mesures)
+
+        elif choix == "4":
+
+            # Afficher les statistiques
+            fonctions.calculer_statistiques(mesures)
+
+        elif choix == "5":
+
+            # Rechercher les anomalies
+            anomalies = fonctions.detecter_anomalie(mesures)
+
+        elif choix == "6":
+
+            # Sauvegarder les données sans anomalies
+            fonctions.sauvegarder_donnees(mesures, anomalies)
+
+        elif choix == "7":
+
+            print("Fermeture du programme. Au revoir !")
+
+        else:
+
+            print("Erreur : veuillez choisir un nombre entre 1 et 7.")
+
+# Lancement du programme
+print("pouet")
+main()
+print("pouet1")

@@ -236,15 +236,4 @@ def sauvegarder_donnees(mesures, anomalies):
     
     return
 
-nom_fichier = input("Fichier:")
-print("Pouet1")
-mesures = charger_donnees(nom_fichier)
-print("pouet2")
-afficher_salle(mesures)
-print("pouet3")
-calculer_statistiques(mesures)
-print("pouet4")
-anomalie = detecter_anomalie(mesures)
-print("pouet5")
-sauvegarder_donnees(mesures, anomalie)
-print("pouet6")
+print("je suis dans le fichier fonction")
