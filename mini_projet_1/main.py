@@ -75,7 +75,7 @@ def main():
 
         elif choix == "6":
 
-            # Sauvegarder les données sans anomalies
+            # Sauvegarder les donnees sans anomalies
             fonctions.sauvegarder_donnees(mesures, anomalies)
 
         elif choix == "7":
@@ -87,6 +87,4 @@ def main():
             print("Erreur : veuillez choisir un nombre entre 1 et 7.")
 
 # Lancement du programme
-print("pouet")
 main()
-print("pouet1")

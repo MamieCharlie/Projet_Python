@@ -231,9 +231,7 @@ def sauvegarder_donnees(mesures, anomalies):
 
                 nombre_sauvegarde += 1
 
-    print("Fichier consommation_nettoyee.csv créé.")
+    print("Fichier consommation_nettoyee.csv cree.")
     print("Nombre de mesures sauvegardées :", nombre_sauvegarde)
     
     return
-
-print("je suis dans le fichier fonction")
