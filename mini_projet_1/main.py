@@ -1,7 +1,4 @@
-print("début")
-
 import fonctions
-print("import fait")
 
 def main():
 

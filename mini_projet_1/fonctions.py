@@ -3,53 +3,111 @@
 import csv
 
 def charger_donnees(nom_fichier):
-# Ouverture et lecture du fichier
-    list = []
-    
+
+    # Initialisation des variables
+    mesures = []
+    nombre_lignes_lues = 0
+    nombre_lignes_valides = 0
+    nombre_lignes_corrigees = 0
+    nombre_lignes_ignorees = 0
+    salles = []
+
     try:
-        with open(nom_fichier, "r") as fichier:
-        # Ouverture du fichier
+
+        # Ouverture et lecture du fichier
+        with open(nom_fichier, "r", encoding="utf-8") as fichier:
+
             lignes = fichier.readlines()
 
+            # Parcourir chaque ligne sans prendre l'en-tête
             for ligne in lignes[1:]:
-            # Parcourt chaque ligne
-                donnees = ligne.strip().split(";")
-                # Retire les espaces autour des données et split sur le ;
 
+                nombre_lignes_lues += 1
+
+                donnees = ligne.strip().split(";")
+
+                # Vérifier le nombre de colonnes
                 if len(donnees) != 5:
-                # Si il manque une info sur la ligne = ignore la ligne
-                    print("Erreur : ligne mal formatée :", ligne)
+
+                    print("Erreur : ligne mal formatée :", ligne.strip())
+                    nombre_lignes_ignorees += 1
                     continue
 
                 try:
-                   # Vérifie le format des données
+
+                    # Vérifier et convertir les données
                     heure = int(donnees[2].strip())
+
                     if heure < 0 or heure >= 24:
-                        print("Erreur : l'heure doit être comprise entre 0 et 23.")
+                        print("Erreur : heure incorrecte :", ligne.strip())
+                        nombre_lignes_ignorees += 1
                         continue
+
                     consommation = float(donnees[3].strip())
                     temperature = float(donnees[4].strip())
 
                 except ValueError:
-                # Si la donnée n'est pas exploitable = ignore la ligne
-                    print("Ligne ignorée :", ligne.strip())
+
+                    print("Erreur : données non exploitables :", ligne.strip())
+                    nombre_lignes_ignorees += 1
                     continue
 
+                # Vérifier si la ligne nécessite une correction
+                salle = donnees[0].strip()
+                jour = donnees[1].strip()
+
+                corrigee = False
+
+                if salle != donnees[0] or jour != donnees[1]:
+                    corrigee = True
+
+                # Normaliser le nom de la salle
+                if salle:
+                    nouvelle_salle = salle[0].upper() + salle[1:]
+
+                    if nouvelle_salle != salle:
+                        corrigee = True
+
+                    salle = nouvelle_salle
+
+                # Construire le dictionnaire
                 mesure = {
-                # Stock les données utilisable dans un dictionnaire
-                    "Salle": donnees[0].strip(),
-                    "Jour": donnees[1].strip(),
-                    "Heure": donnees[2].strip(),
-                    "Consommation": donnees[3].strip(),
-                    "Temperature": donnees[4].strip()
+                    "Salle": salle,
+                    "Jour": jour,
+                    "Heure": heure,
+                    "Consommation": consommation,
+                    "Temperature": temperature
                 }
 
-                list.append(mesure)
-                # Rajoute le dictionnaire sur la liste
+                mesures.append(mesure)
+
+                # Compter les lignes valides ou corrigées
+                if corrigee:
+                    nombre_lignes_corrigees += 1
+                else:
+                    nombre_lignes_valides += 1
+
+                # Ajouter les salles sans doublons
+                if salle and salle not in salles:
+                    salles.append(salle)
+
     except FileNotFoundError:
+
         print("Erreur : le fichier n'existe pas.")
         return None
-    return list
+
+    # Affichage du diagnostic
+    print("\n===== CONTROLE DES DONNEES =====")
+
+    print("Nombre de lignes lues :", nombre_lignes_lues)
+    print("Nombre de lignes valides :", nombre_lignes_valides)
+    print("Nombre de lignes corrigées :", nombre_lignes_corrigees)
+    print("Nombre de lignes ignorées :", nombre_lignes_ignorees)
+    print("Nombre de salles détectées :", len(salles))
+
+    print("\n===== FIN DU CONTROLE =====")
+
+    return mesures
 
      
 def normaliser_salle(mesures):
