@@ -93,7 +93,7 @@ def charger_donnees(nom_fichier):
 
     except FileNotFoundError:
 
-        print("Erreur : le fichier n'existe pas.")
+        print("Erreur : le fichier est inexistant.")
         return None
 
     # Affichage du diagnostic
