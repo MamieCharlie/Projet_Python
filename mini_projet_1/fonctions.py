@@ -140,7 +140,7 @@ def afficher_salle(mesures):
 
     # Si aucune salle ne correspond
     if not salle_trouvee:
-        print("Erreur : cette salle n'existe pas dans le fichier.")
+        print("Erreur : cette salle est inexistante pas dans le fichier.")
     return
 
 def calculer_statistiques(mesures):
