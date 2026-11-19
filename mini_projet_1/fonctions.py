@@ -44,6 +44,10 @@ def charger_donnees(nom_fichier):
                         continue
 
                     consommation = float(donnees[3].strip())
+                    if consommation < 0:
+                        print("Erreur : consommation négative :", ligne.strip())
+                        nombre_lignes_ignorees += 1
+                        continue
                     temperature = float(donnees[4].strip())
 
                 except ValueError:
