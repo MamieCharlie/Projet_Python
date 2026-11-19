@@ -1,6 +1,7 @@
 import fonctions
 
 def main():
+    """Fonction main avec le lancement du programme et la gestion du menu"""
 
     # Demander le nom du fichier à charger
     nom_fichier = input("Entrez le nom du fichier : ")
