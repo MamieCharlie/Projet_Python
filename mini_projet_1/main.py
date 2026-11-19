@@ -21,7 +21,7 @@ def main():
     # Boucle du menu
     choix = 0
 
-    while choix != 7:
+    while choix != "7":
 
         print("\n===== DONNEES ENERGETIQUES =====")
         print("1. Afficher les mesures")
@@ -82,6 +82,5 @@ def main():
         else:
 
             print("Erreur : veuillez choisir un nombre entre 1 et 7.")
-
 # Lancement du programme
 main()
