@@ -2,6 +2,8 @@
 
 import csv
 
+COLONNES = ("Salle", "Jour", "Heure", "Consommation", "Temperature")
+
 def charger_donnees(nom_fichier):
 
     # Initialisation des variables
@@ -257,13 +259,7 @@ def sauvegarder_donnees(mesures, anomalies):
         ecrivain = csv.writer(fichier, delimiter=";")
 
         # Écrire les en-têtes
-        ecrivain.writerow([
-            "Salle",
-            "Jour",
-            "Heure",
-            "Consommation",
-            "Temperature"
-        ])
+        ecrivain.writerow(COLONNES)
 
         nombre_sauvegarde = 0
 
