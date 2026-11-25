@@ -45,15 +45,11 @@ def main():
         elif choix == "2":
 
             # Afficher les salles sans doublons
-            salles = []
-
-            for mesure in mesures:
-                if mesure["Salle"] not in salles:
-                    salles.append(mesure["Salle"])
+            salles = {mesure["Salle"] for mesure in mesures}
 
             print("\n--- LISTE DES SALLES ---")
 
-            for salle in salles:
+            for salle in sorted(salles):
                 print(salle)
 
         elif choix == "3":
