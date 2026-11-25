@@ -187,7 +187,7 @@ def calculer_statistiques(mesures):
     print("Température moyenne :", round(temperature_moyenne, 2))
     return
 
-def detecter_anomalie(mesures):
+def detecter_anomalie(mesures, facteur=1.3):
     anomalies = []
 
     # Parcourir chaque mesure
@@ -215,7 +215,7 @@ def detecter_anomalie(mesures):
         moyenne_reference = sum(consommations_reference) / len(consommations_reference)
 
         # Calculer le seuil de 30 %
-        seuil = moyenne_reference * 1.30
+        seuil = moyenne_reference * facteur
 
         # Vérifier si la consommation est anormalement élevée
         if consommation > seuil:
