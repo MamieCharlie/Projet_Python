@@ -46,4 +46,20 @@ def main():
     print("Ecart a la moyenne des 5 premieres mesures :", np.round(ecarts[:5], 2))
 
 
+    print("\n--- STATISTIQUES PAR SALLE ---")
+
+    stats = df.groupby("Salle").agg(
+        Nombre=("Consommation", "count"),
+        Moyenne=("Consommation", "mean"),
+        Minimum=("Consommation", "min"),
+        Maximum=("Consommation", "max"),
+        Ecart_type=("Consommation", "std"),
+        Temperature_moyenne=("Temperature", "mean"),
+    )
+
+    print(stats.round(2))
+
+    stats.reset_index().to_csv("statistiques_salles.csv", sep=";", index=False)
+    print("\nFichier statistiques_salles.csv cree.")
+
 main()
