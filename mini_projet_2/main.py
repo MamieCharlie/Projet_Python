@@ -2,6 +2,7 @@ import sys
 import pandas as pd
 import numpy as np 
 import fonctions2
+import matplotlib.pyplot as plt
 
 
 def main():
@@ -81,5 +82,94 @@ def main():
         print(f"{salle} Moyenne : MP1={moyenne:.2f}, MP2={ligne['Moyenne']:.2f}")
         print(f"{salle} Minimum : MP1={minimum:.2f}, MP2={ligne['Minimum']:.2f}")
         print(f"{salle} Maximum : MP1={maximum:.2f}, MP2={ligne['Maximum']:.2f}")
+
+    print("\n--- RELATION TEMPERATURE / CONSOMMATION ---")
+
+    temperature = df["Temperature"].to_numpy()
+    correlation = df["Temperature"].corr(df["Consommation"])
+    print("Correlation de Pearson :", round(correlation, 4))
+
+    for salle, groupe in df.groupby("Salle"):
+        r = groupe["Temperature"].corr(groupe["Consommation"])
+        print(f"{salle} : correlation = {r:.2f}")
+
+    if correlation < 0:
+        verdict = "plus la temperature augmente, plus la consommation diminue"
+    else:
+        verdict = "plus la temperature augmente, plus la consommation augmente"
+
+    conclusion = (
+        f"Relation temperature / consommation : correlation de Pearson = {correlation:.4f}. "
+        f"Dans les donnees fournies, {verdict} "
+        f"(voir le graphique consommation en fonction de la temperature)."
+    )
+
+    print(conclusion)
+
+    ## --- GRAPHIQUE CONSOMMATION / TEMPERATURE ---
+
+    salle = stats["Moyenne"].idxmax()
+    mesures_salle = df[df["Salle"] == salle].sort_values("Heure")
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.plot(mesures_salle["Heure"], mesures_salle["Consommation"],
+            marker="o", color="#2a6f97", label=salle)
+    ax.set_title(f"Consommation selon l'heure - salle {salle}")
+    ax.set_xlabel("Heure")
+    ax.set_ylabel("Consommation (kWh)")
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    fig.tight_layout()
+    fig.savefig("graphique_heure.png", dpi=150)
+    plt.close(fig)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.bar(stats.index, stats["Moyenne"], color="#2a6f97")
+    ax.set_title("Consommation moyenne par salle")
+    ax.set_xlabel("Salle")
+    ax.set_ylabel("Consommation moyenne (kWh)")
+    ax.grid(True, axis="y", alpha=0.3)
+    fig.tight_layout()
+    fig.savefig("graphique_salles.png", dpi=150)
+    plt.close(fig)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.scatter(df["Temperature"], df["Consommation"],
+               color="#2a6f97", alpha=0.75, label="Mesures")
+    ax.set_title("Consommation en fonction de la température")
+    ax.set_xlabel("Température (°C)")
+    ax.set_ylabel("Consommation (kWh)")
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    fig.tight_layout()
+    fig.savefig("graphique_temperature.png", dpi=150)
+    plt.close(fig)
+
+        # 11. Rapport final
+    total_anomalies = fonctions2.compter_anomalies(df)
+
+    lignes = [
+        "RAPPORT D'ANALYSE ENERGETIQUE",
+        "",
+        f"Nombre de salles : {df['Salle'].nunique()}",
+        f"Nombre total de mesures : {len(df)}",
+        f"Salle de consommation moyenne maximale : {stats['Moyenne'].idxmax()}",
+        f"Salle de consommation moyenne minimale : {stats['Moyenne'].idxmin()}",
+        f"Salle de consommation la plus variable : {stats['Ecart_type'].idxmax()}",
+        f"Salle de température moyenne maximale : {stats['Temperature_moyenne'].idxmax()}",
+        f"Nombre d'anomalies : {total_anomalies}",
+        "",
+        "Comparaison avec le mini-projet 1 : les moyennes, minimums et maximums",
+        "obtenus par les boucles du mini-projet 1 et par pandas sont identiques",
+        "(voir le détail affiché sur la console).",
+        "",
+        conclusion,
+    ]
+
+    with open("rapport.txt", "w", encoding="utf-8") as fichier:
+        fichier.write("\n".join(lignes) + "\n")
+
+    print("\nFichier rapport.txt cree.")
+
 
 main()
