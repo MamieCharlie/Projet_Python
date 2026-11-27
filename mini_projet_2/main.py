@@ -1,6 +1,7 @@
 import sys
 import pandas as pd
 import numpy as np 
+import fonctions2
 
 
 def main():
@@ -61,5 +62,24 @@ def main():
 
     stats.reset_index().to_csv("statistiques_salles.csv", sep=";", index=False)
     print("\nFichier statistiques_salles.csv cree.")
+
+    print("\n--- CLASSEMENTS ---")
+
+    print("Salle de consommation moyenne maximale :", stats["Moyenne"].idxmax())
+    print("Salle de consommation moyenne minimale :", stats["Moyenne"].idxmin())
+    print("Salle de consommation la plus variable :", stats["Ecart_type"].idxmax())
+    print("Salle de température moyenne maximale :", stats["Temperature_moyenne"].idxmax())
+
+    print("\n--- COMPARAISON MP1 (boucles) / MP2 (pandas) ---")
+
+    manuel = fonctions2.statistiques_boucles(df)
+
+    for salle, (moyenne, minimum, maximum) in manuel.items():
+
+        ligne = stats.loc[salle]
+
+        print(f"{salle} Moyenne : MP1={moyenne:.2f}, MP2={ligne['Moyenne']:.2f}")
+        print(f"{salle} Minimum : MP1={minimum:.2f}, MP2={ligne['Minimum']:.2f}")
+        print(f"{salle} Maximum : MP1={maximum:.2f}, MP2={ligne['Maximum']:.2f}")
 
 main()
